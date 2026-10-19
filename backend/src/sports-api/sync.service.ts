@@ -97,8 +97,8 @@ export class SyncService {
       const fixturesCount = await this.syncFixtures();
       this.logger.log(`Synced ${fixturesCount} fixtures`);
 
-      // 3. Sync match stats for recent played fixtures (cap at 50 to respect API limits)
-      await this.syncMatchStats(50);
+      // 3. Sync match stats for recent played fixtures (cap at 8 to respect API free-tier limit of 100 req/day)
+      await this.syncMatchStats(8);
 
       // 4. Sync top scorers and assist providers
       const playersCount = await this.syncTopPlayers();

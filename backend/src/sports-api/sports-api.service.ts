@@ -73,6 +73,14 @@ export class SportsApiService {
     const json = (await res.json()) as { response: T; errors: unknown };
 
     if (json.errors && typeof json.errors === 'object' && Object.keys(json.errors).length > 0) {
+      const errObj = json.errors as Record<string, string>;
+      // Surface friendly messages for known error types
+      if (errObj['requests']) {
+        throw new Error(`Limite diário de requisições atingido: ${errObj['requests']}`);
+      }
+      if (errObj['token'] || errObj['key']) {
+        throw new Error(`Chave de API inválida: ${errObj['token'] ?? errObj['key']}`);
+      }
       throw new Error(`Erro da API: ${JSON.stringify(json.errors)}`);
     }
 

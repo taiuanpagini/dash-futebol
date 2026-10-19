@@ -179,6 +179,28 @@ export function Header() {
           </a>.
         </div>
       )}
+
+      {/* Banner when sync failed */}
+      {isConfigured && (status?.status === 'error' || (error && !isBusy)) && (
+        <div data-wb-label="Banner de erro de sincronização" className="border-b border-red-500/20 bg-red-500/5 px-4 py-2 text-center text-xs text-red-700 dark:text-red-400">
+          <span className="font-medium">Erro na sincronização</span>
+          {' — '}
+          {(() => {
+            const msg = error ?? status?.errorMessage ?? '';
+            // Friendly messages for common errors
+            if (msg.includes('requests') || msg.includes('limite') || msg.includes('maximum')) {
+              return 'Limite diário de requisições da API atingido (100/dia no plano gratuito). Tente novamente amanhã.';
+            }
+            if (msg.includes('401') || msg.includes('403') || msg.includes('invalid') || msg.includes('key')) {
+              return 'Chave da API inválida ou sem permissão. Verifique a variável SPORTS_API_KEY.';
+            }
+            if (msg.includes('ECONNREFUSED') || msg.includes('ETIMEDOUT') || msg.includes('fetch')) {
+              return 'Não foi possível conectar à API-Football. Verifique a conexão de rede.';
+            }
+            return msg || 'Ocorreu um erro inesperado. Tente novamente.';
+          })()}
+        </div>
+      )}
     </>
   );
 }
