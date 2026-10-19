@@ -1,0 +1,18 @@
+---
+description: Implementation standards and Clean Architecture for production code. Applies when editing application source.
+globs: src/**, app/**, apps/**, backend/**, frontend/**, lib/**, packages/**
+alwaysApply: false
+---
+
+# Implementation rules — Analisador de desempenho futebol
+
+- Business logic lives in service/domain layers — never in controllers, handlers, or infrastructure.
+- Follow the project structure and approved libraries in `plan.md`. Do not invent new directories/patterns, and do not add dependencies that contradict `architectural-decisions.md` without explicit approval.
+- Respect the data model in `data-model.md`; schema changes require a migration. API contracts in `contracts/` are the source of truth for request/response shapes.
+- Do NOT add infrastructure (caching, queues, streaming, search, …) unless approved in `spec.md` → Architectural Considerations.
+- All code must pass linting, type checking, and formatting. Do not ignore failing tests or linter errors.
+- Never hardcode secrets, credentials, or environment-specific values.
+
+For the full, stack-specific DO/DON'T guide (routers, services, models, auth, testing, deployment), consult:
+
+@.specforge/templates/best-practices.md

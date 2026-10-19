@@ -1,0 +1,14 @@
+---
+description: How to author SpecForge specification artifacts (technology-agnostic, Gherkin). Applies when editing files under specs/.
+globs: specs/**
+alwaysApply: false
+---
+
+# Specification authoring rules — {{projectName}}
+
+- Specs are **technology-agnostic**: describe WHAT and WHY, never HOW. No frameworks, SDKs, databases, queues, caching, or protocols in `spec.md`.
+- User stories use **As a / I want / So that**; acceptance scenarios use Gherkin (`Scenario`, `Given`, `When`, `Then`, `And`) with observable, business-readable outcomes.
+- Functional requirements must be testable; success criteria must be measurable and technology-agnostic.
+- Test scenarios follow the ID convention `TS-USNN-NNN` (per user story), `TS-EC-NNN` (edge cases), `TS-NFR-NNN` (non-functional), and map back to FR/NFR ids.
+- Prefer generating/regenerating spec artifacts via **`/specforge.*`** commands or MCP `sdd_*` tools over hand-editing.
+- NEVER modify shared references in `.specforge/templates/` or `.specforge/shared/` — they are read-only.

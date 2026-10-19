@@ -1,0 +1,13 @@
+---
+description: Testing conventions for SpecForge projects. Applies when editing test files.
+globs: "**/*.test.*, **/*.spec.*, tests/**, test/**, **/__tests__/**"
+alwaysApply: false
+---
+
+# Testing rules — Analisador de desempenho futebol
+
+- Test expectations come from `spec.md` acceptance scenarios and `test-scenarios.md` (IDs like `TS-US01-001`).
+- Every user story needs at least a happy path, an alternative path, and a negative/error path. Map each test back to its FR/NFR id.
+- Keep tests deterministic and isolated. Respect the per-layer coverage thresholds defined in `constitution.md`.
+- Use the test infrastructure approved in `plan.md` (e.g. Testcontainers for integration). Do not introduce a different test stack without approval.
+- Tests must not change production code under `src/` — only test utilities, and only when `plan.md` allows.
