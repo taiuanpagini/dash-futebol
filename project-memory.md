@@ -20,6 +20,7 @@ update after significant changes. Keep concise (~3k chars max).
 
 ## Development Log
 
+- 2026-10-19 — Integração com API-Football implementada: SportsApiModule (SportsApiService, SyncService, SyncController), entidades com externalId/logoUrl/photoUrl, seed service com 20 times da PL, botão de sincronização no Header com polling, banner de modo demonstração, endpoints GET /api/sync/status e POST /api/sync/trigger.
 - 2026-10-19 — Dashboard completo implementado: KPI cards, 4 gráficos (gols, posse, chutes, mapa de campo), tabela de partidas, artilheiros, comparativo entre times com radar chart, análise de jogadores por rodada. Mock data completo com 15 rodadas, 20 times, top jogadores (Saka, Haaland, Salah, Palmer).
 
 ## Conventions & Patterns
@@ -46,7 +47,9 @@ update after significant changes. Keep concise (~3k chars max).
 
 ## Known Issues & Limitations
 
-- (none yet)
+- API-Football plano gratuito: 100 req/dia. Uma sincronização completa usa ~42 chamadas (1 times + 1 partidas + 38 stats + 2 jogadores). Cuidado ao sincronizar várias vezes no mesmo dia.
+- PlayerStats por rodada (matchweekStats) não é sincronizado da API (custo alto); mantém dados simulados do seed. Apenas stats agregadas da temporada são sincronizadas via /players/topscorers e /players/topassists.
+- seed.service.ts cria 20 times com dados base; externalId é preenchido na primeira sincronização com a API.
 
 ## Next Steps / Planned
 

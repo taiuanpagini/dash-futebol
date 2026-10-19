@@ -7,6 +7,7 @@ import { TeamsModule } from './teams/teams.module';
 import { FixturesModule } from './fixtures/fixtures.module';
 import { PlayersModule } from './players/players.module';
 import { SeedModule } from './seed/seed.module';
+import { SportsApiModule } from './sports-api/sports-api.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SeedModule } from './seed/seed.module';
     FixturesModule,
     PlayersModule,
     SeedModule,
+    SportsApiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

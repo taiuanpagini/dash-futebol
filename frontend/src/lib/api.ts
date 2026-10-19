@@ -6,6 +6,27 @@ async function fetchJSON<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+async function postJSON<T>(path: string): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, { method: 'POST' });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ message: `Erro ${res.status}` })) as { message?: string };
+    throw new Error(body.message ?? `Erro ${res.status}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+export interface SyncStatusResponse {
+  id: number;
+  status: 'idle' | 'syncing' | 'success' | 'error';
+  lastSyncedAt: string | null;
+  errorMessage: string | null;
+  teamsCount: number | null;
+  fixturesCount: number | null;
+  playersCount: number | null;
+  isConfigured: boolean;
+  updatedAt: string;
+}
+
 export const api = {
   teams: {
     list: () => fetchJSON<unknown[]>('/teams'),
@@ -19,6 +40,10 @@ export const api = {
   players: {
     byTeam: (teamId: number) => fetchJSON<unknown[]>(`/players/team/${teamId}`),
     stats: (playerId: number) => fetchJSON<unknown[]>(`/players/${playerId}/stats`),
+  },
+  sync: {
+    status: () => fetchJSON<SyncStatusResponse>('/sync/status'),
+    trigger: () => postJSON<{ message: string }>('/sync/trigger'),
   },
 };
 

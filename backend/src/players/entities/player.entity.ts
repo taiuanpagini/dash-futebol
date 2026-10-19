@@ -7,6 +7,12 @@ export class Player {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true })
+  externalId: number;
+
+  @Column({ nullable: true })
+  photoUrl: string;
+
   @Column()
   name: string;
 

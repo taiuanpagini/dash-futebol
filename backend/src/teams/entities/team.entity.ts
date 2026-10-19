@@ -5,6 +5,12 @@ export class Team {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true })
+  externalId: number;
+
+  @Column({ nullable: true })
+  logoUrl: string;
+
   @Column({ unique: true })
   name: string;
 

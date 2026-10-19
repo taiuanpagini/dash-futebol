@@ -7,6 +7,9 @@ export class Fixture {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true })
+  externalId: number;
+
   @Column()
   matchweek: number;
 
