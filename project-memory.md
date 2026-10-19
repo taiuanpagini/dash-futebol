@@ -20,7 +20,25 @@ update after significant changes. Keep concise (~3k chars max).
 
 ## Development Log
 
-- 2026-10-19 — Project created from the template wizard.
+- 2026-10-19 — Dashboard completo implementado: KPI cards, 4 gráficos (gols, posse, chutes, mapa de campo), tabela de partidas, artilheiros, comparativo entre times com radar chart, análise de jogadores por rodada. Mock data completo com 15 rodadas, 20 times, top jogadores (Saka, Haaland, Salah, Palmer).
+
+## Conventions & Patterns
+
+- Frontend: React + TypeScript + Tailwind v3 + Recharts para gráficos
+- Mock data em `frontend/src/data/mockData.ts` (20 times, 75 fixtures, 5 jogadores com stats)
+- Types em `frontend/src/types/football.ts`
+- Páginas: Dashboard (`/`), Comparativo (`/comparativo`), Jogadores (`/jogadores`)
+- Componentes: `layout/`, `dashboard/`, `comparison/`
+- Backend NestJS na porta 5174, frontend Vite na 5173
+- CSS variables Premier League theme: primary=purple (#38003c dark mode), accent=green
+
+## Architecture & Stack
+
+- Frontend: React 18 + TypeScript + Vite + Tailwind v3 + Recharts + react-router-dom
+- Backend: NestJS + TypeORM + PostgreSQL (porta 5174)
+- Entidades TypeORM: Team, Fixture, MatchStats, Player, PlayerStats
+- Módulos backend: teams, fixtures, players, seed
+- .webbuilder.json configurado para rodar backend em paralelo com Vite
 
 ## Conventions & Patterns
 

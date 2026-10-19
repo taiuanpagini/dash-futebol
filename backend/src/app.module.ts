@@ -3,6 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TeamsModule } from './teams/teams.module';
+import { FixturesModule } from './fixtures/fixtures.module';
+import { PlayersModule } from './players/players.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -16,11 +20,15 @@ import { AppService } from './app.service';
         type: 'postgres',
         url: config.get<string>('DATABASE_URL'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: config.get<string>('NODE_ENV') === 'development',
-        logging: config.get<string>('NODE_ENV') === 'development',
+        synchronize: config.get<string>('NODE_ENV') !== 'production',
+        logging: (config.get<string>('NODE_ENV') ?? 'development') === 'development',
       }),
       inject: [ConfigService],
     }),
+    TeamsModule,
+    FixturesModule,
+    PlayersModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,15 @@
+{
+  "vite": true,
+  "services": [
+    {
+      "name": "backend",
+      "command": "npm",
+      "args": ["run", "start:dev"],
+      "cwd": "backend",
+      "env": {
+        "PORT": "5174",
+        "NODE_ENV": "development"
+      }
+    }
+  ]
+}
