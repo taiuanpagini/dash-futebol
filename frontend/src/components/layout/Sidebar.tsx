@@ -1,4 +1,3 @@
-import { Team } from '@/types/football';
 import { TEAMS } from '@/data/mockData';
 import { cn } from '@/lib/utils';
 import { getTeamSeasonStats } from '@/data/mockData';

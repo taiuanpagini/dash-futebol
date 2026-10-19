@@ -9,7 +9,6 @@ import { ShotsChart } from '@/components/dashboard/ShotsChart';
 import { RecentMatchesTable } from '@/components/dashboard/RecentMatchesTable';
 import { TopScorers } from '@/components/dashboard/TopScorers';
 import { FieldHeatmap } from '@/components/dashboard/FieldHeatmap';
-import { Team } from '@/types/football';
 import { cn } from '@/lib/utils';
 
 export function Dashboard() {

@@ -66,12 +66,12 @@ export function ShotsChart({ data, team }: ShotsChartProps) {
           />
           <Tooltip content={<CustomTooltip />} />
           <Bar dataKey="shots" name="Chutes" radius={[3, 3, 0, 0]} opacity={0.3}>
-            {data.map((entry, index) => (
+            {data.map((_entry, index) => (
               <Cell key={index} fill={team.primaryColor} />
             ))}
           </Bar>
           <Bar dataKey="shotsOnTarget" name="No Alvo" radius={[3, 3, 0, 0]}>
-            {data.map((entry, index) => (
+            {data.map((_entry, index) => (
               <Cell key={index} fill="#f59e0b" />
             ))}
           </Bar>

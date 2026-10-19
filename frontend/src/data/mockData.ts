@@ -206,7 +206,7 @@ export function getTeamMatchweeks(teamId: number): MatchweekData[] {
       result,
       opponent: opponent.shortName,
       opponentColor: opponent.primaryColor,
-      homeAway: isHome ? 'H' : 'A',
+      homeAway: (isHome ? 'H' : 'A') as 'H' | 'A',
     };
   }).sort((a, b) => a.matchweek - b.matchweek);
 }

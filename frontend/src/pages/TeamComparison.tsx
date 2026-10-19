@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeftRight } from 'lucide-react';
-import { TEAMS, getTeamSeasonStats, getTeamMatchweeks, getFixtures } from '@/data/mockData';
+import { TEAMS, getTeamSeasonStats, getFixtures } from '@/data/mockData';
 import { RadarComparisonChart } from '@/components/comparison/RadarComparisonChart';
-import { TeamSeasonStats } from '@/types/football';
 import { cn } from '@/lib/utils';
 
 function StatRow({
