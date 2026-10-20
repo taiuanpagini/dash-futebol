@@ -1,0 +1,121 @@
+openapi: "3.0.3"
+info:
+  title: Sync API (atualizado)
+  version: "2.0"
+  description: Endpoints de sincronização com suporte a temporada específica
+
+paths:
+  /api/sync/status:
+    get:
+      summary: Retorna o status atual de sincronização
+      operationId: getSyncStatus
+      tags: [sync]
+      responses:
+        "200":
+          description: Status de sincronização
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SyncStatusResponse"
+              example:
+                status: success
+                errorMessage: null
+                lastSyncedSeason: "2024"
+
+  /api/sync/trigger:
+    post:
+      summary: Dispara sincronização com a API-Football
+      operationId: triggerSync
+      tags: [sync]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SyncTriggerRequest"
+            example:
+              season: "2023"
+      responses:
+        "200":
+          description: Sincronização iniciada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Sincronização iniciada para temporada 2023."
+        "409":
+          description: Sincronização já em andamento
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: API key não configurada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/sync/configure:
+    post:
+      summary: Configura a API key da API-Football
+      operationId: configureSyncApiKey
+      tags: [sync]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [apiKey]
+              properties:
+                apiKey:
+                  type: string
+                  description: Chave da API-Football v3
+      responses:
+        "200":
+          description: Chave configurada com sucesso
+        "400":
+          description: Chave inválida ou vazia
+
+components:
+  schemas:
+    SyncStatusResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [idle, syncing, success, error]
+          example: success
+        errorMessage:
+          type: string
+          nullable: true
+          example: null
+        lastSyncedSeason:
+          type: string
+          nullable: true
+          pattern: '^\d{4}$'
+          description: Ano da última temporada sincronizada com sucesso (NOVO)
+          example: "2024"
+
+    SyncTriggerRequest:
+      type: object
+      properties:
+        season:
+          type: string
+          pattern: '^\d{4}$'
+          description: >
+            Temporada a sincronizar (ex: "2024" = 2024/25).
+            Se omitido, usa a variável de ambiente SPORTS_API_SEASON.
+          example: "2023"
+
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode: { type: integer }
+        message: { type: string }
+        error: { type: string }

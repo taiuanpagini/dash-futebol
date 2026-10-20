@@ -1,0 +1,82 @@
+openapi: "3.0.3"
+info:
+  title: Seasons API
+  version: "1.0"
+  description: Endpoints para consulta de temporadas sincronizadas
+
+paths:
+  /api/seasons:
+    get:
+      summary: Lista todas as temporadas disponíveis no banco
+      operationId: listSeasons
+      tags: [seasons]
+      responses:
+        "200":
+          description: Lista de temporadas sincronizadas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SeasonsResponse"
+              example:
+                seasons:
+                  - year: "2024"
+                    label: "2024/25"
+                    fixturesCount: 380
+                    playedCount: 214
+                    isCurrent: true
+                  - year: "2023"
+                    label: "2023/24"
+                    fixturesCount: 380
+                    playedCount: 380
+                    isCurrent: false
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+components:
+  schemas:
+    SeasonSummary:
+      type: object
+      required: [year, label, fixturesCount, playedCount, isCurrent]
+      properties:
+        year:
+          type: string
+          pattern: '^\d{4}$'
+          description: Ano de início da temporada (chave natural)
+          example: "2024"
+        label:
+          type: string
+          description: Rótulo legível para exibição
+          example: "2024/25"
+        fixturesCount:
+          type: integer
+          description: Total de partidas cadastradas para a temporada
+          example: 380
+        playedCount:
+          type: integer
+          description: Partidas já disputadas (played=true)
+          example: 214
+        isCurrent:
+          type: boolean
+          description: true se for a temporada mais recente no banco
+          example: true
+
+    SeasonsResponse:
+      type: object
+      required: [seasons]
+      properties:
+        seasons:
+          type: array
+          items:
+            $ref: "#/components/schemas/SeasonSummary"
+
+  responses:
+    InternalError:
+      description: Erro interno do servidor
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode: { type: integer, example: 500 }
+              message: { type: string }
+              error: { type: string }

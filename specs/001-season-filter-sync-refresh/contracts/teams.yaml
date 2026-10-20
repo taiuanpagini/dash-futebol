@@ -1,0 +1,160 @@
+openapi: "3.0.3"
+info:
+  title: Teams API (atualizado)
+  version: "2.0"
+  description: Endpoints de times com filtro por temporada
+
+paths:
+  /api/teams:
+    get:
+      summary: Lista todos os times (classificação)
+      operationId: listTeams
+      tags: [teams]
+      parameters:
+        - $ref: "#/components/parameters/SeasonQuery"
+      responses:
+        "200":
+          description: Lista de times ordenada por pontuação
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TeamDto"
+
+  /api/teams/{id}:
+    get:
+      summary: Busca um time por ID
+      operationId: getTeam
+      tags: [teams]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Dados do time
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamDto"
+        "404":
+          description: Time não encontrado
+
+  /api/teams/{id}/stats:
+    get:
+      summary: Estatísticas detalhadas de um time por temporada
+      operationId: getTeamSeasonStats
+      tags: [teams]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+        - $ref: "#/components/parameters/SeasonQuery"
+      responses:
+        "200":
+          description: Estatísticas do time na temporada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamSeasonStatsResponse"
+              example:
+                team:
+                  id: 1
+                  name: Arsenal
+                  primaryColor: "#EF0107"
+                summary:
+                  played: 20
+                  wins: 14
+                  draws: 3
+                  losses: 3
+                  goalsScored: 48
+                  goalsConceded: 22
+                  goalDifference: 26
+                  cleanSheets: 7
+                  points: 45
+                  winRate: 70.0
+                averages:
+                  possession: 58.4
+                  shots: 18.2
+                  shotsOnTarget: 7.1
+                  passes: 542.0
+                  passAccuracy: 88.5
+                  fouls: 9.3
+                  yellowCards: 1.8
+                  redCards: 0.1
+                  corners: 6.4
+                  offsides: 2.1
+        "404":
+          description: Time não encontrado
+
+components:
+  parameters:
+    SeasonQuery:
+      name: season
+      in: query
+      required: false
+      schema:
+        type: string
+        pattern: '^\d{4}$'
+      description: >
+        Ano de início da temporada (ex: "2024" = 2024/25).
+        Se omitido, usa a temporada mais recente disponível no banco.
+      example: "2024"
+
+  schemas:
+    TeamDto:
+      type: object
+      required: [id, name, shortName, primaryColor, secondaryColor, stadium, founded, manager, logoText]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        shortName: { type: string }
+        primaryColor: { type: string }
+        secondaryColor: { type: string }
+        stadium: { type: string }
+        founded: { type: integer }
+        manager: { type: string }
+        logoText: { type: string }
+        logoUrl: { type: string, nullable: true }
+        wins: { type: integer }
+        draws: { type: integer }
+        losses: { type: integer }
+        goalsScored: { type: integer }
+        goalsConceded: { type: integer }
+        cleanSheets: { type: integer }
+
+    TeamSeasonStatsResponse:
+      type: object
+      required: [team, summary, averages]
+      properties:
+        team:
+          $ref: "#/components/schemas/TeamDto"
+        summary:
+          type: object
+          properties:
+            played: { type: integer }
+            wins: { type: integer }
+            draws: { type: integer }
+            losses: { type: integer }
+            goalsScored: { type: integer }
+            goalsConceded: { type: integer }
+            goalDifference: { type: integer }
+            cleanSheets: { type: integer }
+            points: { type: integer }
+            winRate: { type: number }
+        averages:
+          type: object
+          properties:
+            possession: { type: number }
+            shots: { type: number }
+            shotsOnTarget: { type: number }
+            passes: { type: number }
+            passAccuracy: { type: number }
+            fouls: { type: number }
+            yellowCards: { type: number }
+            redCards: { type: number }
+            corners: { type: number }
+            offsides: { type: number }
