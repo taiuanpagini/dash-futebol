@@ -20,6 +20,7 @@ update after significant changes. Keep concise (~3k chars max).
 
 ## Development Log
 
+- 2026-10-20 — Modal de configuração de API key: botão "API Key" no Header abre popup com input, salva via POST /api/sync/configure (in-memory no SportsApiService). Banner atualizado para direcionar ao botão.
 - 2026-10-19 — Integração com API-Football implementada: SportsApiModule (SportsApiService, SyncService, SyncController), entidades com externalId/logoUrl/photoUrl, seed service com 20 times da PL, botão de sincronização no Header com polling, banner de modo demonstração, endpoints GET /api/sync/status e POST /api/sync/trigger.
 - 2026-10-19 — Dashboard completo implementado: KPI cards, 4 gráficos (gols, posse, chutes, mapa de campo), tabela de partidas, artilheiros, comparativo entre times com radar chart, análise de jogadores por rodada. Mock data completo com 15 rodadas, 20 times, top jogadores (Saka, Haaland, Salah, Palmer).
 

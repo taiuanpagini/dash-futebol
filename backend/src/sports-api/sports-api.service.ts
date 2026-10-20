@@ -39,7 +39,7 @@ export interface ApiPlayer {
 export class SportsApiService {
   private readonly logger = new Logger(SportsApiService.name);
   private readonly baseUrl = 'https://v3.football.api-sports.io';
-  private readonly apiKey: string | undefined;
+  private apiKey: string | undefined;
   private readonly season: string;
   private readonly leagueId = 39; // Premier League
 
@@ -50,6 +50,10 @@ export class SportsApiService {
 
   get isConfigured(): boolean {
     return !!this.apiKey;
+  }
+
+  setApiKey(key: string): void {
+    this.apiKey = key.trim();
   }
 
   private async get<T>(path: string): Promise<T> {

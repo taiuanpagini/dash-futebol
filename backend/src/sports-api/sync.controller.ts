@@ -1,4 +1,4 @@
-import { Controller, Get, Post, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Post, HttpException, HttpStatus } from '@nestjs/common';
 import { SyncService } from './sync.service';
 import { SportsApiService } from './sports-api.service';
 
@@ -16,6 +16,16 @@ export class SyncController {
       ...status,
       isConfigured: this.sportsApi.isConfigured,
     };
+  }
+
+  @Post('configure')
+  async configure(@Body() body: { apiKey: string }) {
+    const key = body?.apiKey?.trim();
+    if (!key) {
+      throw new HttpException('API key não pode ser vazia.', HttpStatus.BAD_REQUEST);
+    }
+    this.sportsApi.setApiKey(key);
+    return { message: 'API key configurada com sucesso.' };
   }
 
   @Post('trigger')

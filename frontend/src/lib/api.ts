@@ -6,8 +6,12 @@ async function fetchJSON<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-async function postJSON<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, { method: 'POST' });
+async function postJSON<T>(path: string, payload?: unknown): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers: payload ? { 'Content-Type': 'application/json' } : undefined,
+    body: payload ? JSON.stringify(payload) : undefined,
+  });
   if (!res.ok) {
     const body = await res.json().catch(() => ({ message: `Erro ${res.status}` })) as { message?: string };
     throw new Error(body.message ?? `Erro ${res.status}`);
@@ -44,6 +48,7 @@ export const api = {
   sync: {
     status: () => fetchJSON<SyncStatusResponse>('/sync/status'),
     trigger: () => postJSON<{ message: string }>('/sync/trigger'),
+    configure: (apiKey: string) => postJSON<{ message: string }>('/sync/configure', { apiKey }),
   },
 };
 

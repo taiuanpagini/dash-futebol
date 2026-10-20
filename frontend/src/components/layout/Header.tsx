@@ -1,9 +1,10 @@
-import { Trophy, BarChart3, Users, ArrowLeftRight, RefreshCw, CheckCircle2, AlertCircle, Wifi } from 'lucide-react';
+import { Trophy, BarChart3, Users, ArrowLeftRight, RefreshCw, CheckCircle2, AlertCircle, Wifi, KeyRound } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { ModeToggle } from '@/components/mode-toggle';
 import { cn } from '@/lib/utils';
 import { useSyncStatus } from '@/hooks/useSyncStatus';
 import { useState } from 'react';
+import { ApiKeyModal } from '@/components/layout/ApiKeyModal';
 
 const navItems = [
   { path: '/', label: 'Dashboard', icon: BarChart3 },
@@ -26,8 +27,9 @@ function formatLastSync(dateStr: string | null): string {
 
 export function Header() {
   const location = useLocation();
-  const { status, isBusy, error, triggerSync } = useSyncStatus();
+  const { status, isBusy, error, triggerSync, refetch } = useSyncStatus();
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
 
   const syncOk = status?.status === 'success';
   const syncError = status?.status === 'error' || !!error;
@@ -70,6 +72,20 @@ export function Header() {
 
           {/* Right: sync + season badge + toggle */}
           <div className="flex items-center gap-2 shrink-0">
+            {/* API Key button */}
+            <button
+              onClick={() => setShowApiKeyModal(true)}
+              title="Configurar chave da API-Football"
+              className={cn(
+                'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium border transition-all duration-150 cursor-pointer',
+                isConfigured
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20'
+                  : 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20'
+              )}
+            >
+              <KeyRound className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{isConfigured ? 'API OK' : 'API Key'}</span>
+            </button>
             {/* Sync button */}
             <div className="relative">
               <button
@@ -167,8 +183,14 @@ export function Header() {
       {status && !isConfigured && (
         <div data-wb-label="Banner de configuração da API" className="border-b border-amber-500/20 bg-amber-500/5 px-4 py-2 text-center text-xs text-amber-700 dark:text-amber-400">
           <span className="font-medium">Modo demonstração</span>
-          {' — '}usando dados simulados. Para conectar dados reais da Premier League, adicione{' '}
-          <code className="bg-amber-500/10 px-1 rounded font-mono">SPORTS_API_KEY</code> nas variáveis de ambiente do projeto com sua chave da{' '}
+          {' — '}usando dados simulados. Clique em{' '}
+          <button
+            onClick={() => setShowApiKeyModal(true)}
+            className="font-semibold underline underline-offset-2 hover:text-amber-900 dark:hover:text-amber-200 transition-colors cursor-pointer"
+          >
+            API Key
+          </button>
+          {' '}no cabeçalho para inserir sua chave da{' '}
           <a
             href="https://www.api-football.com"
             target="_blank"
@@ -176,7 +198,8 @@ export function Header() {
             className="underline underline-offset-2 hover:text-amber-900 dark:hover:text-amber-200 transition-colors"
           >
             API-Football
-          </a>.
+          </a>
+          {' '}e carregar dados reais da Premier League.
         </div>
       )}
 
@@ -187,7 +210,6 @@ export function Header() {
           {' — '}
           {(() => {
             const msg = error ?? status?.errorMessage ?? '';
-            // Friendly messages for common errors
             if (msg.includes('requests') || msg.includes('limite') || msg.includes('maximum')) {
               return 'Limite diário de requisições da API atingido (100/dia no plano gratuito). Tente novamente amanhã.';
             }
@@ -201,6 +223,16 @@ export function Header() {
           })()}
         </div>
       )}
+
+      {/* API Key Modal */}
+      <ApiKeyModal
+        open={showApiKeyModal}
+        onClose={() => setShowApiKeyModal(false)}
+        onSaved={() => {
+          setShowApiKeyModal(false);
+          refetch();
+        }}
+      />
     </>
   );
 }
