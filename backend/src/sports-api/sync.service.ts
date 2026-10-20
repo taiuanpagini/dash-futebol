@@ -187,14 +187,18 @@ export class SyncService {
     const apiFixtures = await this.sportsApi.fetchFixtures();
 
     // Reset team standings
-    await this.teamRepo.update({}, {
-      wins: 0,
-      draws: 0,
-      losses: 0,
-      goalsScored: 0,
-      goalsConceded: 0,
-      cleanSheets: 0,
-    });
+    await this.teamRepo
+      .createQueryBuilder()
+      .update()
+      .set({
+        wins: 0,
+        draws: 0,
+        losses: 0,
+        goalsScored: 0,
+        goalsConceded: 0,
+        cleanSheets: 0,
+      })
+      .execute();
 
     let synced = 0;
 
